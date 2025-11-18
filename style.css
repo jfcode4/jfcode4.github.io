@@ -1,0 +1,14 @@
+body {
+	color: white;
+	background-color: black;
+	text-align: center;
+}
+h1 {
+	color: red;
+}
+a {
+	color: lime;
+}
+a:visited {
+	color: green;
+}
