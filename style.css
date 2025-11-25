@@ -1,14 +1,18 @@
 body {
-	color: white;
-	background-color: black;
-	text-align: center;
+  color: white;
+  background-color: black;
+  text-align: center;
 }
 h1 {
-	color: red;
+  color: red;
 }
 a {
-	color: lime;
+  color: lime;
 }
 a:visited {
-	color: green;
+  color: green;
+}
+ul {
+  display: table;
+  margin: 0 auto;
 }

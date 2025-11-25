@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do List</title>
+    <style>
+      body {
+        background-color: #322a26;
+        color: #eec643;
+        text-align: center;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      h1 {
+        color: #d33f49;
+        text-align: center;
+      }
+      button {
+        border: none;
+        padding: 10px;
+        border-radius: 6px;
+        font-weight: bold;
+      }
+
+      button:hover {
+        filter: brightness(70%);
+        cursor: pointer;
+      }
+
+      form {
+        background-color: #eec643;
+        color: #191308;
+        border-radius: 10px;
+        width: fit-content;
+        margin: auto;
+        padding: 5px;
+      }
+
+      form input {
+        width: 400px;
+        height: 30px;
+      }
+
+      form button {
+        background-color: #1a1;
+        color: white;
+      }
+
+      .todo {
+        background-color: #2364aa;
+        color:  lightgray;
+        margin: auto;
+        margin-bottom: 8px;
+        width: 75%;
+        padding: 10px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .todo-id, .todo-metadata {
+        color: #aaa;
+        flex: 1;
+      }
+
+      .todo-metadata {
+        flex: 0 1 100px;
+      }
+
+      .todo-content {
+        text-align: left;
+        <!-- flex-basis: 100%; -->
+        color: #eec643;
+        font-weight: bold;
+        padding: 1px;
+        flex: 3;
+      }
+
+      .todo button {
+        background-color: #d33f49;
+        height: fit-content;
+        margin: auto;
+        color: white;
+        flex: 1;
+      }
+    </style>
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  </head>
+  <body>
+    <h1>To Do List</h1>
+    <form id="createTodo" action="javascript:createTodo()">
+      <label>Create todo:</label>
+      <input id="content" type="text">
+      <button type="submit">Create</button>
+    </form>
+    <h3>List of todos: </h3>
+    <div id="todos">
+      <template id="todoTemplate">
+        <div class="todo">
+          <span class="todo-id"></span>
+          <span class="todo-content"></span>
+          <span class="todo-metadata"></span>
+          <button>Delete</button>
+        </div>
+      </template>
+    </div>
+
+    <script>
+      function readStorage() {
+        var numTodos = localStorage.getItem('todos')
+        if (numTodos === null) {
+          localStorage.setItem('todos', '0')
+        } else {
+          for (i = 1; i <= numTodos; i++) {
+            const json = localStorage.getItem('todos.'+i)
+            if (json != null) {
+              const todo = JSON.parse(json)
+              showTodo(todo)
+            }
+          }
+        }
+      }
+
+      function showTodo(todo) {
+        const templ = todoTemplate.content.cloneNode(true);
+        templ.querySelector('.todo').id = todo.id
+        templ.querySelector('.todo-content').textContent = todo.content
+        templ.querySelector('.todo-id').textContent = `[${todo.id}]`
+        templ.querySelector('.todo-metadata').innerHTML = `${todo.created}`
+        templ.querySelector('button').onclick = deleteTodo
+        todos.append(templ)
+        content.value = ''
+      }
+
+      function createTodo() {
+        var numTodos = localStorage.getItem('todos')
+        numTodos++;
+        var today = new Date().toISOString().substr(0,10)
+
+        const todo = {
+          'id': numTodos,
+          'content': content.value,
+          'created': today
+        } 
+        showTodo(todo)
+        content.value = ''
+        // add to local storage
+        localStorage.setItem('todos.' + numTodos, JSON.stringify(todo))
+        localStorage.setItem('todos', numTodos)
+      }
+
+      function deleteTodo(e) {
+        const elem = e.srcElement.parentElement
+        localStorage.removeItem('todos.' + elem.id)
+        elem.remove()
+      }
+
+      readStorage()
+    </script>
+  </body>
+</html>
